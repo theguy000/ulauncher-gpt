@@ -154,11 +154,13 @@ class KeywordQueryEventListener(EventListener):
         items: list[ExtensionResultItem] = []
         try:
             for choice in choices:
-                message = choice['message']['content']
-                message = wrap_text(message, line_wrap)
-
-                items.append(ExtensionResultItem(icon=EXTENSION_ICON, name="Assistant", description=message,
-                                                 on_enter=CopyToClipboardAction(message)))
+                original_message = choice['message']['content']
+                wrapped_message = wrap_text(original_message, line_wrap)
+                
+                items.append(ExtensionResultItem(icon=EXTENSION_ICON, 
+                                                name="Assistant", 
+                                                description=wrapped_message,
+                                                on_enter=CopyToClipboardAction(original_message)))
         # pylint: disable=broad-except
         except Exception as err:
             logger.error('Failed to parse response: %s', str(response))
